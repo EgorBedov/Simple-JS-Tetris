@@ -2,31 +2,28 @@ import {SIZE} from "../utils/constants";
 
 class Designer {
     constructor(onLeft, onRight, onDown) {
-        this.onLeft = onLeft;
-        this.onRight = onRight;
-        this.onDown = onDown;
         /**
          * @type {HTMLTableElement}
          */
         this.table = null;
-        this._initCanvas();
+        this._initCanvas(onLeft, onRight, onDown);
     }
 
-    _initCanvas() {
+    _initCanvas(onLeft, onRight, onDown) {
         this.table = document.querySelector('#application').insertAdjacentElement('afterbegin', this._createTable());
         document.body.addEventListener('keydown', (e) => {
             switch (e.code) {
                 case 'ArrowLeft':
                 case 'KeyA':
-                    this.onLeft();
+                    onLeft();
                     break;
                 case 'ArrowRight':
                 case 'KeyD':
-                    this.onRight();
+                    onRight();
                     break;
                 case 'ArrowDown':
                 case 'KeyS':
-                    this.onDown();
+                    onDown();
                     break;
             }
         });

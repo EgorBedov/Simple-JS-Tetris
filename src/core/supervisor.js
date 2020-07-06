@@ -36,7 +36,7 @@ class SV {
     }
 
     moveLeft() {
-        if (this.current.place.every(coord => coord.column - 1 < 0)) {
+        if (this.current.place.every(coord => coord.column - 1 < 0 || this.body[coord.row][coord.column - 1] !== 0)) {
             return;
         }
         this.current.place = this.current.place.map(coord => {
@@ -49,7 +49,7 @@ class SV {
     }
 
     moveRight() {
-        if (this.current.place.every(coord => coord.column + 1 >= SIZE)) {
+        if (this.current.place.every(coord => coord.column + 1 >= SIZE || this.body[coord.row][coord.column + 1] !== 0)) {
             return;
         }
         this.current.place = this.current.place.map(coord => {
@@ -62,6 +62,11 @@ class SV {
     }
 
     moveDown() {
+        if (this.current.place.every(coord => this.body[coord.row + 1][coord.column] !== 0)) {
+            this._showNext();
+            return;
+        }
+
         let depth = 0;
         this.current.place = this.current.place.map(coord => {
             this.body[coord.row][coord.column] = 0;
@@ -106,7 +111,7 @@ class SV {
     }
 
     _endGame() {
-
+        console.log('GAME OVER');
     }
 
     /**

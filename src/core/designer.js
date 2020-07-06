@@ -47,6 +47,7 @@ class Designer {
         for (let iii = 0; iii < SIZE; iii++) {
             let row = rows.item(iii);
             for (let jjj = 0; jjj < SIZE; jjj++) {
+                row.cells.item(jjj).className = `color-${data[iii][jjj] === 0 ? data[iii][jjj] : data[iii][jjj] % 20 + 1}`;
                 row.cells.item(jjj).className = `color-${data[iii][jjj] % 20}`;
             }
         }

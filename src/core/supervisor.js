@@ -13,7 +13,7 @@ class SV {
 
     _clear() {
         this.gameOver = false;
-        this.counter = 0;
+        this.counter = 1;
         this.current = null;
         /**
          * @type {[[]]}
@@ -87,10 +87,25 @@ class SV {
                 if (!this.body[0][5] && !this.body[0][6]) {
                     coords = [0, 5, 0, 6];
                 }
-                this.body[coords[0]][coords[1]] = obj.index;
-                this.body[coords[2]][coords[3]] = obj.index;
+                this.body[coords[0]][coords[1]] = this.body[coords[2]][coords[3]] = obj.index;
                 obj.place = [{row: coords[0], column: coords[1]}, {row: coords[2], column: coords[3]}];
                 break;
+            case FORMS.CORNER:
+                this.body[0][5] = this.body[0][6] = this.body[1][5] = obj.index;
+                obj.place = [
+                    {
+                        row: 0,
+                        column: 5,
+                    },
+                    {
+                        row: 0,
+                        column: 6,
+                    },
+                    {
+                        row: 1,
+                        column: 5,
+                    }
+                ]
         }
         this.current = obj;
     }
@@ -130,24 +145,17 @@ class SV {
     /**
      * !0 = true
      * !1 = false;
-     * @return {{
-     *     boolean,
-     *     coordinates,
-     * }}
+     * @return {boolean}
      * @private
      */
     _gotSpaceForNext() {
-        // TODO: firstly: check if there is place in top center
-        // TODO: make body dynamic so that it won't depend on magic numbers
         switch (this.provider.previewNextType()) {
             case FORMS.SQUARE:
                 return !this.body[0][5];
             case FORMS.RECT:
-                return (!this.body[0][5] && !this.body[0][6])
-                    || (!this.body[0][4] && !this.body[0][5])
-                    || (!this.body[0][4] && !this.body[1][4])
-                    || (!this.body[0][5] && !this.body[1][5])
-                    || (!this.body[0][6] && !this.body[1][6])
+                return !this.body[0][5] && !this.body[0][6];
+            case FORMS.CORNER:
+                return !this.body[0][5] && !this.body[0][6] && !this.body[1][5];
         }
     }
 

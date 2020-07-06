@@ -25,10 +25,10 @@ class SV {
     _showNext() {
         if (this._gotSpaceForNext()) {
             this._initNewObject();
-            this._rerender();
         } else {
             this._endGame();
         }
+        this._rerender();
     }
 
     rotateLeft() {
@@ -36,6 +36,9 @@ class SV {
     }
 
     moveLeft() {
+        if (this.current.place.every(coord => coord.column - 1 < 0)) {
+            return;
+        }
         this.current.place = this.current.place.map(coord => {
             this.body[coord.row][coord.column] = 0;
             coord.column--;
@@ -46,6 +49,9 @@ class SV {
     }
 
     moveRight() {
+        if (this.current.place.every(coord => coord.column + 1 >= SIZE)) {
+            return;
+        }
         this.current.place = this.current.place.map(coord => {
             this.body[coord.row][coord.column] = 0;
             coord.column++;
@@ -56,12 +62,17 @@ class SV {
     }
 
     moveDown() {
+        let depth = 0;
         this.current.place = this.current.place.map(coord => {
             this.body[coord.row][coord.column] = 0;
             coord.row++;
             this.body[coord.row][coord.column] = this.current.index;
+            depth = coord.row;
             return coord;
         });
+        if (depth === SIZE - 1) {
+            this._showNext();
+        }
         this._rerender();
     }
 

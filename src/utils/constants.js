@@ -1,9 +1,10 @@
 export const FORMS = {
     SQUARE: 'square',
     RECT: 'rectangle',
+    CORNER: 'corner',
 };
 
-export const MAX_FORMS = 2;
+export const MAX_FORMS = 3;
 
 // Body size
 export const SIZE = 11;

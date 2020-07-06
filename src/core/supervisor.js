@@ -13,7 +13,7 @@ class SV {
 
     _clear() {
         this.gameOver = false;
-        this.counter = 0;
+        this.counter = 1;
         this.current = null;
         /**
          * @type {[[]]}
@@ -86,14 +86,6 @@ class SV {
                 let coords = [];
                 if (!this.body[0][5] && !this.body[0][6]) {
                     coords = [0, 5, 0, 6];
-                } else if (!this.body[0][4] && !this.body[0][5]) {
-                    coords = [0, 4, 0, 5];
-                } else if (!this.body[0][4] && !this.body[1][4]) {
-                    coords = [0, 4, 1, 4];
-                } else if (!this.body[0][5] && !this.body[1][5]) {
-                    coords = [0, 5, 1, 5];
-                } else if (!this.body[0][6] && !this.body[1][6]) {
-                    coords = [0, 6, 1, 6];
                 }
                 this.body[coords[0]][coords[1]] = obj.index;
                 this.body[coords[2]][coords[3]] = obj.index;

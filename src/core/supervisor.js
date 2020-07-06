@@ -5,17 +5,21 @@ import Designer from "./designer";
 
 class SV {
     constructor() {
-        this.body = Body();
+        this._clear();
+        this.provider = new Provider();
+        this.designer = new Designer(this.body, this.moveLeft(), this.moveRight(), this.moveDown());
+    }
+
+    _clear() {
         this.objects = new Map();   // <number, BasicObject>
         this.current = null;
-        this.provider = new Provider();
-        this.designer = new Designer();
-        console.log(this.body);
+        this.body = Body();
     }
 
     start() {
-        this._initNewObject();
-
+        this._clear();
+        this.designer.updateCanvas();
+        this._showNext();
     }
 
     _showNext() {
@@ -32,7 +36,11 @@ class SV {
 
     }
 
-    rotateRight() {
+    moveLeft() {
+
+    }
+
+    moveRight() {
 
     }
 

@@ -33,7 +33,6 @@ class BasicObject {
             table[coord.row][coord.column] = 0;
             coord.column++;
             table[coord.row][coord.column] = this.index;
-            console.log(table);
             return coord;
         });
     }

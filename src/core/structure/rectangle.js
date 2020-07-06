@@ -10,7 +10,7 @@ class Rectangle extends BasicObject {
     cantMoveLeft(table) {
         let leftiest = this.place.reduce((prev, curr) => prev.column < curr.column ? prev : curr);
         if (leftiest.column - 1 < 0) {
-            return;
+            return true;
         }
         /**
          * @type {{row: number, column: number}[]}
@@ -34,7 +34,7 @@ class Rectangle extends BasicObject {
     cantMoveRight(table) {
         let rightiest = this.place.reduce((prev, curr) => prev.column > curr.column ? prev : curr);
         if (rightiest.column + 1 >= SIZE) {
-            return;
+            return true;
         }
         /**
          * @type {{row: number, column: number}[]}
@@ -58,7 +58,7 @@ class Rectangle extends BasicObject {
     cantMoveDown(table) {
         let lowest = this.place.reduce((prev, curr) => prev.row > curr.row ? prev : curr);
         if (lowest.row + 1 >= SIZE) {
-            return;
+            return true;
         }
         /**
          * @type {{row: number, column: number}[]}

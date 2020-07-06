@@ -13,6 +13,10 @@ class SV {
     _clear() {
         this.objects = new Map();   // <number, BasicObject>
         this.current = null;
+        /**
+         *
+         * @type {[[]]}
+         */
         this.body = Body();
     }
 
@@ -75,8 +79,9 @@ class SV {
             depth = coord.row;
             return coord;
         });
-        if (depth === SIZE - 1) {
+        if (this._removeLines() || depth === SIZE - 1) {
             this._showNext();
+            return;
         }
         this._rerender();
     }
@@ -102,12 +107,22 @@ class SV {
         this.objects.set(obj.index, obj);
     }
 
-    _step() {
-
+    _removeLines() {
+        let removed = false;
+        this.body = this.body.map(row => {
+            if (row.every(cell => cell !== 0)) {
+                removed = true;
+                return new Array(SIZE).fill(0);
+            } else {
+                return row;
+            }
+        });
+        this._rerender();
+        return removed;
     }
 
-    _moveObject() {
-
+    _step() {
+        this.moveDown();
     }
 
     _endGame() {

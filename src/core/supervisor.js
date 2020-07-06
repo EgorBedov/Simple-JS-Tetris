@@ -52,26 +52,6 @@ class SV {
                 obj.place = [{row: 0, column: 5}];
                 obj.center = {row: 0, column: 5};
                 break;
-            case FORMS.RECT:
-                if (!this.body[0][5] && !this.body[0][6]) {
-                    this.body[0][5] = obj.index;
-                    this.body[0][6] = obj.index;
-                } else if (!this.body[0][4] && !this.body[0][5]) {
-                    this.body[0][4] = obj.index;
-                    this.body[0][5] = obj.index;
-                } else if (!this.body[0][4] && !this.body[1][4]) {
-                    this.body[0][4] = obj.index;
-                    this.body[1][4] = obj.index;
-                } else if (!this.body[0][5] && !this.body[1][5]) {
-                    this.body[0][5] = obj.index;
-                    this.body[1][5] = obj.index;
-                } else if (!this.body[0][6] && !this.body[1][6]) {
-                    this.body[0][6] = obj.index;
-                    this.body[1][6] = obj.index;
-                } else {
-                    console.error('wat ?');
-                }
-                break;
         }
         this.current = obj;
         this.objects.set(obj.index, obj);
@@ -104,12 +84,6 @@ class SV {
         switch (this.provider.previewNextType()) {
             case FORMS.SQUARE:
                 return !this.body[0][5];
-            case FORMS.RECT:
-                return (!this.body[0][5] && !this.body[0][6])
-                    || (!this.body[0][4] && !this.body[0][5])
-                    || (!this.body[0][4] && !this.body[1][4])
-                    || (!this.body[0][5] && !this.body[1][5])
-                    || (!this.body[0][6] && !this.body[1][6])
         }
     }
 }

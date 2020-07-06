@@ -37,50 +37,29 @@ class SV {
         this._rerender();
     }
 
-    rotateLeft() {
-
-    }
-
     moveLeft() {
-        if (this.current.place.every(coord => coord.column - 1 < 0 || this.body[coord.row][coord.column - 1] !== 0)) {
+        if (this.current.cantMoveLeft(this.body)) {
             return;
         }
-        this.current.place = this.current.place.map(coord => {
-            this.body[coord.row][coord.column] = 0;
-            coord.column--;
-            this.body[coord.row][coord.column] = this.current.index;
-            return coord;
-        });
+        this.current.moveLeft(this.body);
         this._rerender();
     }
 
     moveRight() {
-        if (this.current.place.every(coord => coord.column + 1 >= SIZE || this.body[coord.row][coord.column + 1] !== 0)) {
+        if (this.current.cantMoveRight(this.body)) {
             return;
         }
-        this.current.place = this.current.place.map(coord => {
-            this.body[coord.row][coord.column] = 0;
-            coord.column++;
-            this.body[coord.row][coord.column] = this.current.index;
-            return coord;
-        });
+        this.current.moveRight(this.body);
         this._rerender();
     }
 
     moveDown() {
-        if (this.current.place.every(coord => this.body[coord.row + 1][coord.column] !== 0)) {
+        if (this.current.cantMoveDown(this.body)) {
             this._showNext();
             return;
         }
 
-        let depth = 0;
-        this.current.place = this.current.place.map(coord => {
-            this.body[coord.row][coord.column] = 0;
-            coord.row++;
-            this.body[coord.row][coord.column] = this.current.index;
-            depth = coord.row;
-            return coord;
-        });
+        let depth = this.current.moveDown(this.body);
         if (this._removeLines() || depth === SIZE - 1) {
             this._showNext();
             return;

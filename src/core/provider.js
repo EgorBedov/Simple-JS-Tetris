@@ -36,7 +36,7 @@ class Provider {
         if (!this.nextObject) {
             this._createNext();
         }
-        let tmpObj = Object.assign({}, this.nextObject);
+        let tmpObj = Object.assign(Object.create(Object.getPrototypeOf(this.nextObject)), this.nextObject);
         this._createNext();
         return tmpObj;
     }

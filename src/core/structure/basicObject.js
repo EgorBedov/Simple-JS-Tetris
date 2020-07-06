@@ -1,4 +1,5 @@
 import { PLACE } from "../../utils/types";
+import {FORMS} from "../../utils/constants";
 
 // TODO: change to TS interface
 
@@ -16,6 +17,17 @@ class BasicObject {
         this.type = '';
         this.index = 0;
     }
+
+    cantMoveLeft(table) {}
+    moveLeft(table) {}
+    cantMoveRight() {}
+    moveRight(table) {}
+    cantMoveDown(table) {}
+    /**
+     * @param table {[[]]}
+     * @return {number}
+     */
+    moveDown(table) {}
 }
 
 export default BasicObject;

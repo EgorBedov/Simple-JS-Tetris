@@ -11,7 +11,7 @@ class Provider {
     _createNext() {
         switch (getRandomInt(1)) {  // TODO: change to MAX_FORMS to access rectangle
         case 0:
-            this.nextObject = new Square();
+            this.nextObject = new Rectangle();
             break;
         case 1:
             this.nextObject = new Rectangle();

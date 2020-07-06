@@ -13,7 +13,7 @@ class SV {
 
     _clear() {
         this.gameOver = false;
-        this.objects = new Map();   // <number, BasicObject>
+        this.counter = 0;
         this.current = null;
         /**
          * @type {[[]]}
@@ -74,18 +74,33 @@ class SV {
     _initNewObject() {
         // Store new object
         let obj = this.provider.getNext();
-        obj.index = this.objects.size + 1;
+        obj.index = this.counter++;
 
         // Place it in body
         switch (obj.type) {
             case FORMS.SQUARE:
                 this.body[0][5] = obj.index;
                 obj.place = [{row: 0, column: 5}];
-                obj.center = {row: 0, column: 5};
+                break;
+            case FORMS.RECT:
+                let coords = [];
+                if (!this.body[0][5] && !this.body[0][6]) {
+                    coords = [0, 5, 0, 6];
+                } else if (!this.body[0][4] && !this.body[0][5]) {
+                    coords = [0, 4, 0, 5];
+                } else if (!this.body[0][4] && !this.body[1][4]) {
+                    coords = [0, 4, 1, 4];
+                } else if (!this.body[0][5] && !this.body[1][5]) {
+                    coords = [0, 5, 1, 5];
+                } else if (!this.body[0][6] && !this.body[1][6]) {
+                    coords = [0, 6, 1, 6];
+                }
+                this.body[coords[0]][coords[1]] = obj.index;
+                this.body[coords[2]][coords[3]] = obj.index;
+                obj.place = [{row: coords[0], column: coords[1]}, {row: coords[2], column: coords[3]}];
                 break;
         }
         this.current = obj;
-        this.objects.set(obj.index, obj);
     }
 
     _removeLines() {
@@ -135,6 +150,12 @@ class SV {
         switch (this.provider.previewNextType()) {
             case FORMS.SQUARE:
                 return !this.body[0][5];
+            case FORMS.RECT:
+                return (!this.body[0][5] && !this.body[0][6])
+                    || (!this.body[0][4] && !this.body[0][5])
+                    || (!this.body[0][4] && !this.body[1][4])
+                    || (!this.body[0][5] && !this.body[1][5])
+                    || (!this.body[0][6] && !this.body[1][6])
         }
     }
 

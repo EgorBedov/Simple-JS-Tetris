@@ -2,6 +2,7 @@ import Body from "./structure/body";
 import Provider from "./provider";
 import {FORMS, SIZE} from "../utils/constants";
 import Designer from "./designer";
+import {getArrayOfZeros} from "../utils/maths";
 
 class SV {
     constructor() {
@@ -112,11 +113,24 @@ class SV {
         this.body = this.body.map(row => {
             if (row.every(cell => cell !== 0)) {
                 removed = true;
-                return new Array(SIZE).fill(0);
+                return getArrayOfZeros(SIZE);
             } else {
                 return row;
             }
         });
+
+        if (removed) {
+            // Move everything one block down (starting from the bottom)
+            for (let iii = SIZE - 1; iii > 0; iii--) {
+                if (this.body[iii].every(cell => cell === 0)) {
+                    for (let jjj = iii; jjj > 0; jjj--) {
+                        this.body[jjj] = this.body[jjj - 1];
+                    }
+                    this.body[0] = getArrayOfZeros(SIZE); // top layer
+                }
+            }
+        }
+
         this._rerender();
         return removed;
     }

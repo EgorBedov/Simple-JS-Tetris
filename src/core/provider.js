@@ -10,6 +10,7 @@ class Provider {
     }
 
     _createNext() {
+
         switch (getRandomInt(MAX_FORMS)) {
         case 0:
             this.nextObject = new Square();

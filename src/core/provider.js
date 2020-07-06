@@ -1,7 +1,7 @@
 import {MAX_FORMS} from "../utils/constants";
-import Square from "./structure/square";
 import Rectangle from "./structure/rectangle";
 import { getRandomInt } from "../utils/maths";
+import Square from "./structure/square";
 
 class Provider {
     constructor() {
@@ -9,9 +9,9 @@ class Provider {
     }
 
     _createNext() {
-        switch (getRandomInt(1)) {  // TODO: change to MAX_FORMS to access rectangle
+        switch (getRandomInt(MAX_FORMS)) {  // TODO: change to MAX_FORMS to access rectangle
         case 0:
-            this.nextObject = new Rectangle();
+            this.nextObject = new Square();
             break;
         case 1:
             this.nextObject = new Rectangle();

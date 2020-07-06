@@ -28,7 +28,7 @@ class Rectangle extends BasicObject {
             }
         });
 
-        return lefties.every(left => table[left.row][left.column - 1] !== 0);
+        return lefties.some(left => table[left.row][left.column - 1] !== 0);
     }
 
     cantMoveRight(table) {
@@ -52,7 +52,7 @@ class Rectangle extends BasicObject {
             }
         });
 
-        return righties.every(right => table[right.row][right.column + 1] !== 0);
+        return righties.some(right => table[right.row][right.column + 1] !== 0);
     }
 
     cantMoveDown(table) {
@@ -65,7 +65,7 @@ class Rectangle extends BasicObject {
          */
         let lowests = this.place.filter(coord => table[coord.row + 1][coord.column] !== this.index);
 
-        return lowests.every(low => table[low.row + 1][low.column] !== 0);
+        return lowests.some(low => table[low.row + 1][low.column] !== 0);
     }
 }
 

@@ -1,3 +1,5 @@
+import Body from "./structure/body";
+
 function appStart() {
     let base = document.querySelector('#application').insertAdjacentElement('afterbegin', createBase());
     base.addEventListener('keyDown', (e) => {
@@ -16,6 +18,9 @@ function appStart() {
                 break;
         }
     });
+
+    let body = new Body();
+    console.log(body);
 }
 
 function createBase() {

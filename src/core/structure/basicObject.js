@@ -4,7 +4,14 @@ import { PLACE } from "../../utils/types";
 
 class BasicObject {
     constructor(place = [{...PLACE}], center = {...PLACE}) {
+        /**
+         * @type {{column: number, row: number}[]}
+         */
         this.place = place;
+        /**
+         *
+         * @type {{column: number, row: number}}
+         */
         this.center = center;
         this.type = '';
         this.index = 0;

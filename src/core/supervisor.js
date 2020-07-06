@@ -7,7 +7,7 @@ class SV {
     constructor() {
         this._clear();
         this.provider = new Provider();
-        this.designer = new Designer(this.moveLeft(), this.moveRight(), this.moveDown());
+        this.designer = new Designer(this.moveLeft.bind(this), this.moveRight.bind(this), this.moveDown.bind(this));
     }
 
     _clear() {
@@ -18,14 +18,14 @@ class SV {
 
     start() {
         this._clear();
-        this.designer.updateCanvas(this.body);
+        this._rerender();
         this._showNext();
     }
 
     _showNext() {
         if (this._gotSpaceForNext()) {
             this._initNewObject();
-            this.designer.updateCanvas(this.body);
+            this._rerender();
         } else {
             this._endGame();
         }
@@ -36,15 +36,37 @@ class SV {
     }
 
     moveLeft() {
-
+        this.current.place = this.current.place.map(coord => {
+            this.body[coord.row][coord.column] = 0;
+            coord.column--;
+            this.body[coord.row][coord.column] = this.current.index;
+            return coord;
+        });
+        this._rerender();
     }
 
     moveRight() {
-
+        this.current.place = this.current.place.map(coord => {
+            this.body[coord.row][coord.column] = 0;
+            coord.column++;
+            this.body[coord.row][coord.column] = this.current.index;
+            return coord;
+        });
+        this._rerender();
     }
 
     moveDown() {
+        this.current.place = this.current.place.map(coord => {
+            this.body[coord.row][coord.column] = 0;
+            coord.row++;
+            this.body[coord.row][coord.column] = this.current.index;
+            return coord;
+        });
+        this._rerender();
+    }
 
+    _rerender() {
+        this.designer.updateCanvas(this.body);
     }
 
     _initNewObject() {

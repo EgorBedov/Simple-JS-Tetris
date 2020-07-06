@@ -12,10 +12,10 @@ class SV {
     }
 
     _clear() {
+        this.gameOver = false;
         this.objects = new Map();   // <number, BasicObject>
         this.current = null;
         /**
-         *
          * @type {[[]]}
          */
         this.body = Body();
@@ -25,6 +25,7 @@ class SV {
         this._clear();
         this._rerender();
         this._showNext();
+        this._step();
     }
 
     _showNext() {
@@ -135,11 +136,8 @@ class SV {
         return removed;
     }
 
-    _step() {
-        this.moveDown();
-    }
-
     _endGame() {
+        this.gameOver = true;
         console.log('GAME OVER');
     }
 
@@ -159,6 +157,15 @@ class SV {
             case FORMS.SQUARE:
                 return !this.body[0][5];
         }
+    }
+
+    _step() {
+        setTimeout(() => {
+            if (!this.gameOver) {
+                this.moveDown();
+                this._step();
+            }
+        }, 1000);
     }
 }
 

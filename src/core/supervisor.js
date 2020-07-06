@@ -7,7 +7,7 @@ class SV {
     constructor() {
         this._clear();
         this.provider = new Provider();
-        this.designer = new Designer(this.body, this.moveLeft(), this.moveRight(), this.moveDown());
+        this.designer = new Designer(this.moveLeft(), this.moveRight(), this.moveDown());
     }
 
     _clear() {
@@ -18,15 +18,14 @@ class SV {
 
     start() {
         this._clear();
-        this.designer.updateCanvas();
+        this.designer.updateCanvas(this.body);
         this._showNext();
     }
 
     _showNext() {
         if (this._gotSpaceForNext()) {
             this._initNewObject();
-
-            this.designer.updateCanvas();
+            this.designer.updateCanvas(this.body);
         } else {
             this._endGame();
         }
@@ -51,7 +50,7 @@ class SV {
     _initNewObject() {
         // Store new object
         let obj = this.provider.getNext();
-        obj.index = this.objects.size;
+        obj.index = this.objects.size + 1;
 
         // Place it in body
         switch (obj.type) {

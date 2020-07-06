@@ -6,7 +6,6 @@ class Designer {
         this.onRight = onRight;
         this.onDown = onDown;
         this._initCanvas();
-        this.data = data;
         /**
          * @type {HTMLTableElement}
          */
@@ -48,12 +47,12 @@ class Designer {
         return elem;
     }
 
-    updateCanvas() {
+    updateCanvas(data) {
         let rows = this.table.rows;
         for (let iii = 0; iii < SIZE; iii++) {
             let row = rows.item(iii);
             for (let jjj = 0; jjj < SIZE; jjj++) {
-                row.cells.item(jjj).innerText = this.data[iii][jjj];
+                row.cells.item(jjj).innerText = data[iii][jjj];
             }
         }
     }

@@ -12,10 +12,10 @@ class SV {
     }
 
     _clear() {
-        this.objects = new Map();   // <number, BasicObject>
+        this.gameOver = false;
+        this.counter = 0;
         this.current = null;
         /**
-         *
          * @type {[[]]}
          */
         this.body = Body();
@@ -25,6 +25,7 @@ class SV {
         this._clear();
         this._rerender();
         this._showNext();
+        this._step();
     }
 
     _showNext() {
@@ -36,50 +37,29 @@ class SV {
         this._rerender();
     }
 
-    rotateLeft() {
-
-    }
-
     moveLeft() {
-        if (this.current.place.every(coord => coord.column - 1 < 0 || this.body[coord.row][coord.column - 1] !== 0)) {
+        if (this.current.cantMoveLeft(this.body)) {
             return;
         }
-        this.current.place = this.current.place.map(coord => {
-            this.body[coord.row][coord.column] = 0;
-            coord.column--;
-            this.body[coord.row][coord.column] = this.current.index;
-            return coord;
-        });
+        this.current.moveLeft(this.body);
         this._rerender();
     }
 
     moveRight() {
-        if (this.current.place.every(coord => coord.column + 1 >= SIZE || this.body[coord.row][coord.column + 1] !== 0)) {
+        if (this.current.cantMoveRight(this.body)) {
             return;
         }
-        this.current.place = this.current.place.map(coord => {
-            this.body[coord.row][coord.column] = 0;
-            coord.column++;
-            this.body[coord.row][coord.column] = this.current.index;
-            return coord;
-        });
+        this.current.moveRight(this.body);
         this._rerender();
     }
 
     moveDown() {
-        if (this.current.place.every(coord => this.body[coord.row + 1][coord.column] !== 0)) {
+        if (this.current.cantMoveDown(this.body)) {
             this._showNext();
             return;
         }
 
-        let depth = 0;
-        this.current.place = this.current.place.map(coord => {
-            this.body[coord.row][coord.column] = 0;
-            coord.row++;
-            this.body[coord.row][coord.column] = this.current.index;
-            depth = coord.row;
-            return coord;
-        });
+        let depth = this.current.moveDown(this.body);
         if (this._removeLines() || depth === SIZE - 1) {
             this._showNext();
             return;
@@ -94,18 +74,25 @@ class SV {
     _initNewObject() {
         // Store new object
         let obj = this.provider.getNext();
-        obj.index = this.objects.size + 1;
+        obj.index = this.counter++;
 
         // Place it in body
         switch (obj.type) {
             case FORMS.SQUARE:
                 this.body[0][5] = obj.index;
                 obj.place = [{row: 0, column: 5}];
-                obj.center = {row: 0, column: 5};
+                break;
+            case FORMS.RECT:
+                let coords = [];
+                if (!this.body[0][5] && !this.body[0][6]) {
+                    coords = [0, 5, 0, 6];
+                }
+                this.body[coords[0]][coords[1]] = obj.index;
+                this.body[coords[2]][coords[3]] = obj.index;
+                obj.place = [{row: coords[0], column: coords[1]}, {row: coords[2], column: coords[3]}];
                 break;
         }
         this.current = obj;
-        this.objects.set(obj.index, obj);
     }
 
     _removeLines() {
@@ -135,11 +122,8 @@ class SV {
         return removed;
     }
 
-    _step() {
-        this.moveDown();
-    }
-
     _endGame() {
+        this.gameOver = true;
         console.log('GAME OVER');
     }
 
@@ -158,7 +142,22 @@ class SV {
         switch (this.provider.previewNextType()) {
             case FORMS.SQUARE:
                 return !this.body[0][5];
+            case FORMS.RECT:
+                return (!this.body[0][5] && !this.body[0][6])
+                    || (!this.body[0][4] && !this.body[0][5])
+                    || (!this.body[0][4] && !this.body[1][4])
+                    || (!this.body[0][5] && !this.body[1][5])
+                    || (!this.body[0][6] && !this.body[1][6])
         }
+    }
+
+    _step() {
+        setTimeout(() => {
+            if (!this.gameOver) {
+                this.moveDown();
+                this._step();
+            }
+        }, 1000);
     }
 }
 

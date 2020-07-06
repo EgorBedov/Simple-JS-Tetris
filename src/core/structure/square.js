@@ -1,5 +1,5 @@
 import BasicObject from "./basicObject";
-import {FORMS} from "../../utils/constants";
+import {FORMS, SIZE} from "../../utils/constants";
 
 class Square extends BasicObject {
     constructor(props) {
@@ -7,16 +7,16 @@ class Square extends BasicObject {
         this.type = FORMS.SQUARE;
     }
 
-    initSquare() {
-
+    cantMoveLeft(table) {
+        return this.place.every(coord => coord.column - 1 < 0 || table[coord.row][coord.column - 1] !== 0);
     }
 
-    getSquare() {
-        return
+    cantMoveRight(table) {
+        return this.place.every(coord => coord.column + 1 >= SIZE || table[coord.row][coord.column + 1] !== 0);
     }
 
-    static rotateLeft() {
-
+    cantMoveDown(table) {
+        return this.place.every(coord => coord.row + 1 >= SIZE || table[coord.row + 1][coord.column] !== 0);
     }
 }
 

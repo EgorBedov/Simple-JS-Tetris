@@ -12,3 +12,69 @@
     line-height: 50px;
     text-align: center;
 }
+
+
+/* colors */
+.color-0 {
+    background: whitesmoke;
+}
+.color-1 {
+    background: red;
+}
+.color-2 {
+    background: aquamarine;
+}
+.color-3 {
+    background: darkgreen;
+}
+.color-4 {
+    background: darkorchid;
+}
+.color-5 {
+    background: magenta;
+}
+.color-6 {
+    background: midnightblue;
+}
+.color-7 {
+    background: greenyellow;
+}
+.color-8 {
+    background: lightpink;
+}
+.color-9 {
+    background: lightcoral;
+}
+.color-10 {
+    background: maroon;
+}
+.color-11 {
+    background: yellow;
+}
+.color-12 {
+    background: saddlebrown;
+}
+.color-13 {
+    background: slateblue;
+}
+.color-14 {
+    background: darkcyan;
+}
+.color-15 {
+    background: orangered;
+}
+.color-16 {
+    background: darkkhaki;
+}
+.color-17 {
+    background: lightskyblue;
+}
+.color-18 {
+    background: mediumvioletred;
+}
+.color-19 {
+    background: rebeccapurple;
+}
+.color-20 {
+    background: khaki;
+}

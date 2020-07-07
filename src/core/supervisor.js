@@ -2,7 +2,7 @@ import Body from "./structure/body";
 import Provider from "./provider";
 import {FORMS, SIZE} from "../utils/constants";
 import Designer from "./designer";
-import {compFunc, getArrayOfZeros} from "../utils/maths";
+import {compFunc, getArrayOfZeros, getBorders} from "../utils/maths";
 
 class SV {
     constructor() {
@@ -44,6 +44,10 @@ class SV {
      * @param where {'left' | 'right' | 'down'}
      */
     move(where) {
+        if (where === 'right' && this.current.type === FORMS.CORNER) {
+            console.log('corner');
+        }
+
         // TODO: Prepare values
         let boundary, compare, axis, changeAxis;
         switch (where) {
@@ -89,20 +93,20 @@ class SV {
                 }
         }
 
-        // TODO: Check all blocks
-        let borders = [];
-        this.current.place.forEach(coord => {
-
-        });
+        // Check all blocks
+        let borders = getBorders(this.current.place, this.body, this.current.index, where);
 
         if (borders.some(b => this.body[where === 'down' ? b.row + 1 : b.row][where === 'left' ? b.column - 1 : where === 'right' ? b.column + 1 : b.column] !== 0)) {
+            if (where === 'down') {
+                this._showNext();
+            }
             return;
         }
 
         // Clear previous space
         this.current.place = this.current.place.map(coord => {
             this.body[coord.row][coord.column] = 0;
-            changeAxis(coord[axis]);
+            coord[axis] = changeAxis(coord[axis]);
             return coord;
         });
 
@@ -218,7 +222,7 @@ class SV {
     _step() {
         setTimeout(() => {
             if (!this.gameOver) {
-                this.moveDown();
+                this.move('down');
                 this._step();
             }
         }, 1000);

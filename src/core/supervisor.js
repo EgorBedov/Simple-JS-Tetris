@@ -2,7 +2,7 @@ import Body from "./structure/body";
 import Provider from "./provider";
 import {FORMS, SIZE} from "../utils/constants";
 import Designer from "./designer";
-import {getArrayOfZeros} from "../utils/maths";
+import {compFunc, getArrayOfZeros} from "../utils/maths";
 
 class SV {
     constructor() {
@@ -44,16 +44,82 @@ class SV {
      * @param where {'left' | 'right' | 'down'}
      */
     move(where) {
+        // TODO: Prepare values
+        let boundary, compare, axis, changeAxis;
         switch (where) {
             case "down":
+                boundary = SIZE;
+                compare = 'ge';
+                axis = 'row';
+                changeAxis = a => ++a;
                 break;
             case "left":
+                boundary = 0;
+                compare = 'ls';
+                axis = 'column';
+                changeAxis = a => --a;
                 break;
             case "right":
+                boundary = SIZE;
+                compare = 'ge';
+                axis = 'column';
+                changeAxis = a => ++a;
                 break;
             default:
                 return;
         }
+
+        // Check furthest block for boundaries
+        let furthest = this.current.place.reduce(
+            (prev, curr) =>
+                compFunc(compare, prev[axis], curr[axis]) ? prev : curr);
+        // TODO: remove this switch
+        switch (boundary) {
+            case SIZE:
+                if (compFunc('ge', furthest[axis] + 1, SIZE)) {
+                    return;
+                } else {
+                    break;
+                }
+            case 0:
+                if (compFunc('ls', furthest[axis] - 1, 0)) {
+                    return;
+                } else {
+                    break;
+                }
+        }
+
+        // TODO: Check all blocks
+        let borders = [];
+        this.current.place.forEach(coord => {
+
+        });
+
+        if (borders.some(b => this.body[where === 'down' ? b.row + 1 : b.row][where === 'left' ? b.column - 1 : where === 'right' ? b.column + 1 : b.column] !== 0)) {
+            return;
+        }
+
+        // Clear previous space
+        this.current.place = this.current.place.map(coord => {
+            this.body[coord.row][coord.column] = 0;
+            changeAxis(coord[axis]);
+            return coord;
+        });
+
+        // Paint new space
+        this.current.place.forEach(coord => {
+            this.body[coord.row][coord.column] = this.current.index;
+        });
+
+        // Check if need to push next object
+        if (where === 'down') {
+            let lowest = this.current.place.reduce((prev, curr) => prev.row > curr.row ? prev : curr);
+            if (this._removeLines() || lowest.row === SIZE - 1) {
+                this._showNext();
+                return;
+            }
+        }
+
         this._rerender();
     }
 

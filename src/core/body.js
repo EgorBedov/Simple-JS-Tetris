@@ -1,4 +1,4 @@
-import {DIMENSIONS, SIZE} from "../../utils/constants";
+import {DIMENSIONS, SIZE} from "../utils/constants";
 
 function Body() {
     // TODO: improve it with map() or sth

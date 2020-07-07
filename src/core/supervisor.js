@@ -1,13 +1,12 @@
-import Body from "./structure/body";
-import Provider from "./provider";
+import Body from "./body";
 import {FORMS, SIZE} from "../utils/constants";
 import Designer from "./designer";
-import {bodyEmptyFrom, compFunc, getArrayOfZeros, getBordersNew} from "../utils/maths";
+import {bodyEmptyFrom, compFunc, getArrayOfZeros, getBordersNew, getRandomInt} from "../utils/maths";
 
 class SV {
     constructor() {
+        this.objects = [FORMS.RECT, FORMS.SQUARE, FORMS.CORNER];
         this._clear();
-        this.provider = new Provider();
         this.designer = new Designer(this.move.bind(this));
     }
 
@@ -32,8 +31,9 @@ class SV {
         if (this.gameOver) {
             return;
         }
+        this._initNewObject();
         if (this._gotSpaceForNext()) {
-            this._initNewObject();
+            this._injectNewObject();
         } else {
             this._endGame();
         }
@@ -115,26 +115,29 @@ class SV {
 
     _initNewObject() {
         // Store new object
-        let obj = this.provider.getNext();
+        let obj = {};
+        obj.type = this.objects[getRandomInt(this.objects.length)];
         obj.index = this.counter++;
+        this.current = obj;
+    }
 
-        // Place it in body
-        switch (obj.type) {
+    _injectNewObject() {
+        switch (this.current.type) {
             case FORMS.SQUARE:
-                this.body[0][5] = obj.index;
-                obj.place = [{row: 0, column: 5}];
+                this.body[0][5] = this.current.index;
+                this.current.place = [{row: 0, column: 5}];
                 break;
             case FORMS.RECT:
                 let coords = [];
                 if (!this.body[0][5] && !this.body[0][6]) {
                     coords = [0, 5, 0, 6];
                 }
-                this.body[coords[0]][coords[1]] = this.body[coords[2]][coords[3]] = obj.index;
-                obj.place = [{row: coords[0], column: coords[1]}, {row: coords[2], column: coords[3]}];
+                this.body[coords[0]][coords[1]] = this.body[coords[2]][coords[3]] = this.current.index;
+                this.current.place = [{row: coords[0], column: coords[1]}, {row: coords[2], column: coords[3]}];
                 break;
             case FORMS.CORNER:
-                this.body[0][5] = this.body[0][6] = this.body[1][5] = obj.index;
-                obj.place = [
+                this.body[0][5] = this.body[0][6] = this.body[1][5] = this.current.index;
+                this.current.place = [
                     {
                         row: 0,
                         column: 5,
@@ -149,7 +152,6 @@ class SV {
                     }
                 ]
         }
-        this.current = obj;
     }
 
     _removeLines() {
@@ -194,7 +196,7 @@ class SV {
      * @private
      */
     _gotSpaceForNext() {
-        switch (this.provider.previewNextType()) {
+        switch (this.current.type) {
             case FORMS.SQUARE:
                 return !this.body[0][5];
             case FORMS.RECT:

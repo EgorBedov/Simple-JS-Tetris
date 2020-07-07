@@ -2,7 +2,7 @@ import Body from "./structure/body";
 import Provider from "./provider";
 import {FORMS, SIZE} from "../utils/constants";
 import Designer from "./designer";
-import {compFunc, getArrayOfZeros, getBordersNew} from "../utils/maths";
+import {bodyEmptyFrom, compFunc, getArrayOfZeros, getBordersNew} from "../utils/maths";
 
 class SV {
     constructor() {
@@ -99,10 +99,10 @@ class SV {
 
         // Check if need to push next object
         if (where === 'down') {
-            let lowest = this.current.place.reduce((prev, curr) => prev.row > curr.row ? prev : curr);
-            if (this._removeLines() || lowest.row === SIZE - 1) {
+            let borders = getBordersNew(this.current, this.body, where);
+            if (borders.some(b => b.row + 1 >= SIZE || this.body[b.row + 1][b.column] !== 0)) {
+                this._removeLines();
                 this._showNext();
-                return;
             }
         }
 
@@ -165,12 +165,15 @@ class SV {
 
         if (removed) {
             // Move everything one block down (starting from the bottom)
-            for (let iii = SIZE - 1; iii > 0; iii--) {
-                if (this.body[iii].every(cell => cell === 0)) {
+            let iii = SIZE - 1;
+            while (iii > 0) {
+                if (this.body[iii].every(cell => cell === 0) && !bodyEmptyFrom(iii, this.body)) {
                     for (let jjj = iii; jjj > 0; jjj--) {
                         this.body[jjj] = this.body[jjj - 1];
                     }
                     this.body[0] = getArrayOfZeros(SIZE); // top layer
+                } else {
+                    iii--;
                 }
             }
         }

@@ -21,6 +21,23 @@ export function compFunc(how, a, b) {
 }
 
 /**
+ * @param table {number[][]}
+ * @param row {number}
+ */
+export function bodyEmptyFrom(row, table) {
+    let empty = true;
+
+    for (let iii = row; iii > 0; iii--) {
+        empty = table[iii].every(cell => cell === 0);
+        if (!empty) {
+            return empty;
+        }
+    }
+
+    return empty;
+}
+
+/**
  * @param obj {{place: number[][], index: number}}
  * @param canvas {[[number]]}
  * @param where {'left' | 'right' | 'down'}

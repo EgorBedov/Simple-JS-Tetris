@@ -8,7 +8,7 @@ class SV {
     constructor() {
         this._clear();
         this.provider = new Provider();
-        this.designer = new Designer(this.moveLeft.bind(this), this.moveRight.bind(this), this.moveDown.bind(this));
+        this.designer = new Designer(this.move.bind(this));
     }
 
     _clear() {
@@ -29,6 +29,9 @@ class SV {
     }
 
     _showNext() {
+        if (this.gameOver) {
+            return;
+        }
         if (this._gotSpaceForNext()) {
             this._initNewObject();
         } else {
@@ -37,32 +40,19 @@ class SV {
         this._rerender();
     }
 
-    moveLeft() {
-        if (this.current.cantMoveLeft(this.body)) {
-            return;
-        }
-        this.current.moveLeft(this.body);
-        this._rerender();
-    }
-
-    moveRight() {
-        if (this.current.cantMoveRight(this.body)) {
-            return;
-        }
-        this.current.moveRight(this.body);
-        this._rerender();
-    }
-
-    moveDown() {
-        if (this.current.cantMoveDown(this.body)) {
-            this._showNext();
-            return;
-        }
-
-        let depth = this.current.moveDown(this.body);
-        if (this._removeLines() || depth === SIZE - 1) {
-            this._showNext();
-            return;
+    /**
+     * @param where {'left' | 'right' | 'down'}
+     */
+    move(where) {
+        switch (where) {
+            case "down":
+                break;
+            case "left":
+                break;
+            case "right":
+                break;
+            default:
+                return;
         }
         this._rerender();
     }

@@ -1,29 +1,29 @@
 import {SIZE} from "../utils/constants";
 
 class Designer {
-    constructor(onLeft, onRight, onDown) {
+    constructor(onClick) {
         /**
          * @type {HTMLTableElement}
          */
         this.table = null;
-        this._initCanvas(onLeft, onRight, onDown);
+        this._initCanvas(onClick);
     }
 
-    _initCanvas(onLeft, onRight, onDown) {
+    _initCanvas(onClick) {
         this.table = document.querySelector('#application').insertAdjacentElement('afterbegin', this._createTable());
         document.body.addEventListener('keydown', (e) => {
             switch (e.code) {
                 case 'ArrowLeft':
                 case 'KeyA':
-                    onLeft();
+                    onClick('left');
                     break;
                 case 'ArrowRight':
                 case 'KeyD':
-                    onRight();
+                    onClick('right');
                     break;
                 case 'ArrowDown':
                 case 'KeyS':
-                    onDown();
+                    onClick('down');
                     break;
             }
         });
@@ -48,7 +48,6 @@ class Designer {
             let row = rows.item(iii);
             for (let jjj = 0; jjj < SIZE; jjj++) {
                 row.cells.item(jjj).className = `color-${data[iii][jjj] === 0 ? data[iii][jjj] : data[iii][jjj] % 20 + 1}`;
-                row.cells.item(jjj).className = `color-${data[iii][jjj] % 20}`;
             }
         }
     }

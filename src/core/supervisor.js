@@ -44,11 +44,6 @@ class SV {
      * @param where {'left' | 'right' | 'down'}
      */
     move(where) {
-        if (where === 'right' && this.current.type === FORMS.CORNER) {
-            console.log('corner');
-        }
-
-        // TODO: Prepare values
         let boundary, compare, axis, changeAxis;
         switch (where) {
             case "down":
@@ -77,26 +72,12 @@ class SV {
         let furthest = this.current.place.reduce(
             (prev, curr) =>
                 compFunc(compare, prev[axis], curr[axis]) ? prev : curr);
-        // TODO: remove this switch
-        switch (boundary) {
-            case SIZE:
-                if (compFunc('ge', furthest[axis] + 1, SIZE)) {
-                    return;
-                } else {
-                    break;
-                }
-            case 0:
-                if (compFunc('ls', furthest[axis] - 1, 0)) {
-                    return;
-                } else {
-                    break;
-                }
+        if (compFunc(compare, changeAxis(furthest[axis]), boundary)) {
+            return;
         }
 
         // Check all blocks
         let borders = getBordersNew(this.current, this.body, where);
-        console.log(borders);
-
         if (borders.some(b => this.body[where === 'down' ? b.row + 1 : b.row][where === 'left' ? b.column - 1 : where === 'right' ? b.column + 1 : b.column] !== 0)) {
             if (where === 'down') {
                 this._showNext();

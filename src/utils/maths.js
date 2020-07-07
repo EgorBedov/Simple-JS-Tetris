@@ -21,35 +21,55 @@ export function compFunc(how, a, b) {
 }
 
 /**
- * @param array {{row: number, column: number}[]}
+ * @param obj {{place: number[][], index: number}}
  * @param canvas {[[number]]}
- * @param index {number}
  * @param where {'left' | 'right' | 'down'}
+ * @return {number[]}
  */
-export function getBorders(array, canvas, index, where) {
-    let boundary, compare;
+export function getBordersNew(obj, canvas, where) {
+    /**
+     * @type {Map<number, {row: number, column: number}[]>}
+     */
+    let axis = new Map();
+    let mainAxis, subAxis, compare;
+
     switch (where) {
         case "down":
-            return array.filter(coord => canvas[coord.row + 1][coord.column] !== index);
+            mainAxis = 'column';
+            subAxis = 'row';
+            compare = 'ge';
+            break;
         case "right":
-            boundary = array.length - 1;
-            compare = 'gr';
+            mainAxis = 'row';
+            subAxis = 'column';
+            compare = 'ge';
             break;
         case "left":
-            boundary = 0;
+            mainAxis = 'row';
+            subAxis = 'column';
             compare = 'ls';
             break;
+        default:
+            throw new Error('Incorrect argument >where<');
     }
-    let borders = [];
-    let max = array[boundary].column;
-    array.forEach(coord => {
-        let {column} = coord;
-        if (compFunc(compare, column, max)) {
-            max = column;
-            borders = [coord];
-        } else if (column === max) {
-            borders.push(coord);
+
+    // Split into arrays of rows or columns
+    obj.place.forEach(coord => {
+        if (axis.has(coord[mainAxis])) {
+            let prevArray = axis.get(coord[mainAxis]);
+            prevArray.push(coord);
+            axis.set(coord[mainAxis], prevArray);
+        } else {
+            axis.set(coord[mainAxis], [coord]);
         }
     });
+
+    // Iterate over those arrays retrieving maximums or minimums
+    let borders = [];
+    for (let coords of axis.values()) {
+        borders.push(coords.reduce((prev, curr) => compFunc(compare, prev[subAxis], curr[subAxis]) ? prev : curr));
+    }
+
+    // Return new array
     return borders;
 }

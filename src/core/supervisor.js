@@ -2,7 +2,7 @@ import Body from "./structure/body";
 import Provider from "./provider";
 import {FORMS, SIZE} from "../utils/constants";
 import Designer from "./designer";
-import {compFunc, getArrayOfZeros, getBorders} from "../utils/maths";
+import {compFunc, getArrayOfZeros, getBordersNew} from "../utils/maths";
 
 class SV {
     constructor() {
@@ -94,7 +94,8 @@ class SV {
         }
 
         // Check all blocks
-        let borders = getBorders(this.current.place, this.body, this.current.index, where);
+        let borders = getBordersNew(this.current, this.body, where);
+        console.log(borders);
 
         if (borders.some(b => this.body[where === 'down' ? b.row + 1 : b.row][where === 'left' ? b.column - 1 : where === 'right' ? b.column + 1 : b.column] !== 0)) {
             if (where === 'down') {
